@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}رصد التسميع اليومي - إتقان أكاديمي{% endblock %}
+{% block content %}
+<div class="table-card" style="max-width: 800px; margin: 0 auto;">
+  <h2 style="color: var(--accent-gold); margin-bottom: 1.5rem; text-align: center;">📝 رصد التسميع والتحفيظ اليومي</h2>
+  <form id="recordForm">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+      <div>
+        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">رقم الطالب</label>
+        <input type="number" id="studentId" required style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.6); color: #fff;">
+      </div>
+      <div>
+        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">رقم الحلقة</label>
+        <input type="number" id="circleId" required style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.6); color: #fff;">
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+      <div>
+        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">نوع التسميع</label>
+        <select id="recordType" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.6); color: #fff;">
+          <option value="memorization">حفظ جديد</option>
+          <option value="revision">مراجعة</option>
+          <option value="recitation">تلاوة</option>
+        </select>
+      </div>
+      <div>
+        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">اسم السورة</label>
+        <input type="text" id="surahName" placeholder="مثال: البقرة" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.6); color: #fff;">
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+      <div>
+        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">من آية</label>
+        <input type="number" id="fromVerse" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.6); color: #fff;">
+      </div>
+      <div>
+        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">إلى آية</label>
+        <input type="number" id="toVerse" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.6); color: #fff;">
+      </div>
+      <div>
+        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">التقدير</label>
+        <select id="grade" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.6); color: #fff;">
+          <option value="excellent">ممتاز</option>
+          <option value="veryGood">جيد جداً</option>
+          <option value="good">جيد</option>
+          <option value="acceptable">مقبول</option>
+        </select>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">حفظ السجل</button>
+  </form>
+  <div id="recordResult" style="margin-top: 1rem; text-align: center;"></div>
+</div>
+
+<script>
+document.getElementById('recordForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const token = localStorage.getItem('access_token');
+  const resultDiv = document.getElementById('recordResult');
+  if (!token) {
+    resultDiv.innerHTML = '<span style="color: #ef4444;">يرجى تسجيل الدخول أولاً</span>';
+    return;
+  }
+  const body = {
+    studentId: parseInt(document.getElementById('studentId').value),
+    circleId: parseInt(document.getElementById('circleId').value),
+    type: document.getElementById('recordType').value,
+    surah_name: document.getElementById('surahName').value,
+    from_verse: parseInt(document.getElementById('fromVerse').value) || null,
+    to_verse: parseInt(document.getElementById('toVerse').value) || null,
+    grade: document.getElementById('grade').value
+  };
+
+  try {
+    const res = await fetch('/api/v1/halaqat/records/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(body)
+    });
+    if (res.ok) {
+      resultDiv.innerHTML = '<span style="color: #10b981;">تم رصد التسميع بنجاح!</span>';
+    } else {
+      const err = await res.json();
+      resultDiv.innerHTML = `<span style="color: #ef4444;">خطأ: ${JSON.stringify(err)}</span>`;
+    }
+  } catch (e) {
+    resultDiv.innerHTML = '<span style="color: #ef4444;">تعذر الاتصال بالخادم</span>';
+  }
+});
+</script>
+{% endblock %}

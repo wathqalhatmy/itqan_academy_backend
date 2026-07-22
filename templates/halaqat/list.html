@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}إدارة الحلقات - إتقان أكاديمي{% endblock %}
+{% block content %}
+<div class="table-card">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <h2 style="color: var(--accent-gold);">📚 الحلقات القرآنية المسجلة</h2>
+  </div>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>رقم الحلقة</th>
+        <th>اسم الحلقة</th>
+        <th>اسم المعلم/الشيخ</th>
+        <th>المستوى</th>
+      </tr>
+    </thead>
+    <tbody id="halaqatTbody">
+      <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">جاري تحميل الحلقات من الـ API...</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+async function loadHalaqat() {
+  const tbody = document.getElementById('halaqatTbody');
+  try {
+    const token = localStorage.getItem('access_token');
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+    const res = await fetch('/api/v1/halaqat/circles/', { headers });
+    const data = await res.json();
+    const results = data.results || data;
+    
+    if (results && results.length > 0) {
+      tbody.innerHTML = results.map(c => `
+        <tr>
+          <td>${c.id}</td>
+          <td><strong>${c.name}</strong></td>
+          <td>${c.teacher_name}</td>
+          <td>${c.level}</td>
+        </tr>
+      `).join('');
+    } else {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">لا توجد حلقات مسجلة حالياً</td></tr>';
+    }
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #ef4444;">يلزم تسجيل الدخول لعرض الحلقات</td></tr>';
+  }
+}
+document.addEventListener('DOMContentLoaded', loadHalaqat);
+</script>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% load static %}
+<header class="navbar">
+  <a href="{% url 'home' %}" class="brand">
+    📖 إتقان أكاديمي
+  </a>
+  <ul class="nav-links">
+    <li><a href="{% url 'home' %}">الرئيسية</a></li>
+    <li><a href="{% url 'halaqat_list_page' %}">الحلقات</a></li>
+    <li><a href="{% url 'record_daily_page' %}">التسميع اليومي</a></li>
+    <li><a href="{% url 'reports_dashboard_page' %}">التقارير والإحصائيات</a></li>
+    <li><a href="/admin/" target="_blank">لوحة الإدارة</a></li>
+  </ul>
+  <div>
+    <a href="{% url 'login_page' %}" class="btn btn-primary">تسجيل الدخول</a>
+  </div>
+</header>

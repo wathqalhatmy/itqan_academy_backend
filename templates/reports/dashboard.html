@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}التقارير والإحصائيات - إتقان أكاديمي{% endblock %}
+{% block content %}
+<h2 style="color: var(--accent-gold); margin-bottom: 1.5rem;">📊 لوحة الإحصائيات والتقارير العامة</h2>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <h3>إجمالي الحلقات</h3>
+    <div class="value" id="statCircles">-</div>
+  </div>
+  <div class="stat-card">
+    <h3>إجمالي الطلاب</h3>
+    <div class="value" id="statStudents">-</div>
+  </div>
+  <div class="stat-card">
+    <h3>الطلاب النشطون</h3>
+    <div class="value" id="statActive" style="color: #10b981;">-</div>
+  </div>
+  <div class="stat-card">
+    <h3>متوسط تقييم السلوك</h3>
+    <div class="value" id="statBehavior" style="color: #fbbf24;">-</div>
+  </div>
+</div>
+
+<script>
+async function loadStats() {
+  try {
+    const token = localStorage.getItem('access_token');
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+    const res = await fetch('/api/v1/reports/stats/', { headers });
+    if (res.ok) {
+      const data = await res.json();
+      document.getElementById('statCircles').textContent = data.total_circles;
+      document.getElementById('statStudents').textContent = data.total_students;
+      document.getElementById('statActive').textContent = data.active_students;
+      document.getElementById('statBehavior').textContent = data.avg_behavior_rating;
+    }
+  } catch (e) {
+    console.error('Failed to load stats', e);
+  }
+}
+document.addEventListener('DOMContentLoaded', loadStats);
+</script>
+{% endblock %}

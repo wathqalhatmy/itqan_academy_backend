@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}الصفحة غير موجودة (404) - إتقان أكاديمي{% endblock %}
+{% block content %}
+<div style="text-align: center; padding: 4rem 1rem;">
+  <h1 style="font-size: 5rem; color: #ef4444; margin-bottom: 1rem;">404</h1>
+  <h2 style="color: #f8fafc; margin-bottom: 1rem;">عفواً، الصفحة التي تبحث عنها غير موجودة!</h2>
+  <p style="color: #94a3b8; margin-bottom: 2rem;">تأكد من صحة الرابط أو عد إلى الصفحة الرئيسية.</p>
+  <a href="{% url 'home' %}" class="btn btn-primary">العودة للرئيسية</a>
+</div>
+{% endblock %}

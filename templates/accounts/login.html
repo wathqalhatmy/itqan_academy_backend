@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}تسجيل الدخول - إتقان أكاديمي{% endblock %}
+{% block content %}
+<div style="max-width: 450px; margin: 3rem auto; background: var(--card-bg); padding: 2rem; border-radius: 16px; border: 1px solid var(--border-color);">
+  <h2 style="text-align: center; color: var(--accent-gold); margin-bottom: 1.5rem;">تسجيل الدخول للنظام</h2>
+  <form id="loginForm">
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">اسم المستخدم</label>
+      <input type="text" id="username" required style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.6); color: #fff;">
+    </div>
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">كلمة المرور</label>
+      <input type="password" id="password" required style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.6); color: #fff;">
+    </div>
+    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">دخول</button>
+  </form>
+  <div id="loginResult" style="margin-top: 1rem; text-align: center;"></div>
+</div>
+
+<script>
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  const resultDiv = document.getElementById('loginResult');
+
+  try {
+    const res = await fetch('/api/v1/auth/login/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      localStorage.setItem('access_token', data.access);
+      resultDiv.innerHTML = '<span style="color: #10b981;">تم تسجيل الدخول بنجاح!</span>';
+    } else {
+      resultDiv.innerHTML = '<span style="color: #ef4444;">اسم المستخدم أو كلمة المرور غير صحيحة</span>';
+    }
+  } catch (err) {
+    resultDiv.innerHTML = '<span style="color: #ef4444;">حدث خطأ أثناء الاتصال</span>';
+  }
+});
+</script>
+{% endblock %}

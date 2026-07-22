@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}خطأ في الخادم (500) - إتقان أكاديمي{% endblock %}
+{% block content %}
+<div style="text-align: center; padding: 4rem 1rem;">
+  <h1 style="font-size: 5rem; color: #f59e0b; margin-bottom: 1rem;">500</h1>
+  <h2 style="color: #f8fafc; margin-bottom: 1rem;">حدث خطأ غير متوقع في الخادم</h2>
+  <p style="color: #94a3b8; margin-bottom: 2rem;">تم تسليط الضوء على المشكلة وجاري العمل على معالجتها.</p>
+  <a href="{% url 'home' %}" class="btn btn-primary">العودة للرئيسية</a>
+</div>
+{% endblock %}

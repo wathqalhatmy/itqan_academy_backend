@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}الرئيسية - إتقان أكاديمي{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 3rem 1rem;">
+  <h1 style="font-size: 2.8rem; font-weight: 900; background: linear-gradient(135deg, #fbbf24, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem;">
+    منظومة إتقان أكاديمي لقرآن الكريم
+  </h1>
+  <p style="font-size: 1.2rem; color: #94a3b8; max-width: 700px; margin: 0 auto 2.5rem;">
+    نظام رقمي متكامل لإدارة الحلقات القرآنية، رصد الحضور والتسميع اليومي، وإدارة الاختبارات والتقارير الإحصائية.
+  </p>
+
+  <div class="stats-grid" style="max-width: 900px; margin: 0 auto 3rem;">
+    <div class="stat-card">
+      <h3>حالة النظام</h3>
+      <div class="value" style="color: #10b981;">نشط (Online)</div>
+    </div>
+    <div class="stat-card">
+      <h3>الخدمات البرمجية API</h3>
+      <div class="value" style="color: #3b82f6;">REST v1</div>
+    </div>
+    <div class="stat-card">
+      <h3>المصادقة والتأمين</h3>
+      <div class="value" style="color: #fbbf24;">JWT Active</div>
+    </div>
+  </div>
+
+  <div class="table-card" style="text-align: right; max-width: 900px; margin: 0 auto;">
+    <h2 style="color: #fbbf24; margin-bottom: 1rem;">🚀 الواجهات البرمجية المتاحة (API Endpoints):</h2>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>الخدمة</th>
+          <th>المسار (Endpoint)</th>
+          <th>الوصف</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>تسجيل الدخول</td>
+          <td><code>/api/v1/auth/login/</code></td>
+          <td>الحصول على توكن JWT للوصول للخدمات</td>
+        </tr>
+        <tr>
+          <td>إدارة الحلقات</td>
+          <td><code>/api/v1/halaqat/circles/</code></td>
+          <td>عرض، إضافة، وتعديل الحلقات القرآنية</td>
+        </tr>
+        <tr>
+          <td>إدارة الطلاب</td>
+          <td><code>/api/v1/halaqat/students/</code></td>
+          <td>قائمة الطلاب والأجزاء المجتازة والتقييمات</td>
+        </tr>
+        <tr>
+          <td>الحضور والغياب</td>
+          <td><code>/api/v1/halaqat/attendance/bulk-save/</code></td>
+          <td>رصد الحضور التجميعي الذكي للطلاب</td>
+        </tr>
+        <tr>
+          <td>التسميع اليومي</td>
+          <td><code>/api/v1/halaqat/records/</code></td>
+          <td>تسجيل الحفظ الجديد والمراجعة والتلاوة</td>
+        </tr>
+        <tr>
+          <td>التقارير والإحصائيات</td>
+          <td><code>/api/v1/reports/stats/</code></td>
+          <td>إحصائيات شاملة ومؤشرات الأداء</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
