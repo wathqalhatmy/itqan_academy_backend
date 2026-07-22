@@ -1,4 +1,27 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+class Profile(models.Model):
+    ROLE_CHOICES = [
+        ('ADMIN', 'مدير النظام'),
+        ('TEACHER', 'معلم'),
+    ]
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='TEACHER')
+
+    def __str__(self):
+        return f"{self.user.username} - {self.get_role_display()}"
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
 
 class Circle(models.Model):
     LEVEL_CHOICES = [
@@ -8,7 +31,8 @@ class Circle(models.Model):
     ]
 
     name = models.CharField(max_length=200, verbose_name="اسم الحلقة")
-    teacher_name = models.CharField(max_length=200, verbose_name="اسم المعلم")
+    teacher_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="managed_circles", verbose_name="المعلم المسؤول")
+    teacher_name = models.CharField(max_length=200, verbose_name="اسم المعلم (للعرض)")
     level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='memorization', verbose_name="المستوى")
 
     def __str__(self):
